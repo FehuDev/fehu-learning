@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fehu Learning - World Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky-blue: #5DADE2;
+            --grass-green: #52BE80;
+            --sun-yellow: #F9E79F;
+            --earth-brown: #A86F3E;
+            --ocean-blue: #1B4F72;
+            --flower-pink: #F48FB1;
+            --cloud-white: #F8F9FA;
+            --shadow: rgba(0,0,0,0.1);
+            --primary-font: 'Fredoka', sans-serif;
+            --body-font: 'Quicksand', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--body-font);
+            background: linear-gradient(180deg, #AED6F1 0%, #ABEBC6 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Floating clouds animation */
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+            opacity: 0.6;
+            animation: float 60s infinite linear;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+        }
+
+        .cloud1 {
+            width: 100px;
+            height: 40px;
+            top: 10%;
+            left: -100px;
+        }
+
+        .cloud1::before {
+            width: 50px;
+            height: 40px;
+            top: -20px;
+            left: 10px;
+        }
+
+        .cloud1::after {
+            width: 60px;
+            height: 30px;
+            top: -10px;
+            right: 10px;
+        }
+
+        .cloud2 {
+            width: 120px;
+            height: 45px;
+            top: 30%;
+            left: -150px;
+            animation-delay: -20s;
+        }
+
+        .cloud2::before {
+            width: 55px;
+            height: 45px;
+            top: -22px;
+            left: 15px;
+        }
+
+        .cloud2::after {
+            width: 65px;
+            height: 35px;
+            top: -12px;
+            right: 15px;
+        }
+
+        .cloud3 {
+            width: 90px;
+            height: 35px;
+            top: 60%;
+            left: -120px;
+            animation-delay: -40s;
+        }
+
+        .cloud3::before {
+            width: 45px;
+            height: 35px;
+            top: -18px;
+            left: 12px;
+        }
+
+        .cloud3::after {
+            width: 50px;
+            height: 28px;
+            top: -10px;
+            right: 12px;
+        }
+
+        @keyframes float {
+            100% {
+                left: calc(100% + 200px);
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 10;
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 4px 20px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--primary-font);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--grass-green);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo::before {
+            content: '🌍';
+            font-size: 40px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-btn {
+            font-family: var(--primary-font);
+            font-size: 18px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .nav-btn.child {
+            background: var(--sun-yellow);
+            color: #333;
+        }
+
+        .nav-btn.parent {
+            background: var(--ocean-blue);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 5;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Welcome Section */
+        .welcome {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome h1 {
+            font-family: var(--primary-font);
+            font-size: 48px;
+            color: #2C3E50;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px var(--shadow);
+        }
+
+        .welcome p {
+            font-size: 20px;
+            color: #34495E;
+            font-weight: 500;
+        }
+
+        /* World Explorer Section */
+        .world-explorer {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 10px 40px var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: var(--primary-font);
+            font-size: 36px;
+            color: var(--ocean-blue);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Biome Grid */
+        .biome-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .biome-card {
+            background: linear-gradient(135deg, var(--card-color-1), var(--card-color-2));
+            border-radius: 20px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .biome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .biome-card:hover::before {
+            opacity: 1;
+        }
+
+        .biome-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .biome-card.desert {
+            --card-color-1: #F4D03F;
+            --card-color-2: #DC7633;
+        }
+
+        .biome-card.rainforest {
+            --card-color-1: #52BE80;
+            --card-color-2: #196F3D;
+        }
+
+        .biome-card.ocean {
+            --card-color-1: #5DADE2;
+            --card-color-2: #1B4F72;
+        }
+
+        .biome-card.arctic {
+            --card-color-1: #AED6F1;
+            --card-color-2: #5499C7;
+        }
+
+        .biome-card.grassland {
+            --card-color-1: #ABEBC6;
+            --card-color-2: #52BE80;
+        }
+
+        .biome-card.mountain {
+            --card-color-1: #B2BABB;
+            --card-color-2: #566573;
+        }
+
+        .biome-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .biome-card h3 {
+            font-family: var(--primary-font);
+            font-size: 26px;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .biome-card p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.95);
+            line-height: 1.5;
+        }
+
+        .biome-details {
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* Subject Grid */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .subject-card.maths {
+            --accent-color: #E74C3C;
+        }
+
+        .subject-card.english {
+            --accent-color: #3498DB;
+        }
+
+        .subject-card.science {
+            --accent-color: #9B59B6;
+        }
+
+        .subject-card.nature {
+            --accent-color: #27AE60;
+        }
+
+        .subject-card.geography {
+            --accent-color: #E67E22;
+        }
+
+        .subject-card.wellbeing {
+            --accent-color: #F48FB1;
+        }
+
+        .subject-card.creative {
+            --accent-color: #F39C12;
+        }
+
+        .subject-card.life-skills {
+            --accent-color: #1ABC9C;
+        }
+
+        .subject-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .subject-card h3 {
+            font-family: var(--primary-font);
+            font-size: 22px;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+
+        .subject-card p {
+            font-size: 14px;
+            color: #7F8C8D;
+            line-height: 1.4;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            max-width: 900px;
+            margin: 50px auto;
+            border-radius: 30px;
+            padding: 40px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 36px;
+            cursor: pointer;
+            color: #7F8C8D;
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            background: #F8F9FA;
+            color: #2C3E50;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            font-family: var(--primary-font);
+            font-size: 36px;
+            color: var(--ocean-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-section {
+            margin-bottom: 30px;
+        }
+
+        .modal-section h3 {
+            font-family: var(--primary-font);
+            font-size: 24px;
+            color: #2C3E50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .animal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animal-item {
+            background: #F8F9FA;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .animal-item:hover {
+            background: #E8F8F5;
+            transform: scale(1.05);
+        }
+
+        .animal-emoji {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .animal-name {
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 4px;
+        }
+
+        .animal-role {
+            font-size: 12px;
+            color: #7F8C8D;
+            font-style: italic;
+        }
+
+        .plant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .plant-item {
+            background: #F8F9FA;
+            padding: 15px;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .plant-item:hover {
+            background: #FEF9E7;
+            transform: translateY(-3px);
+        }
+
+        .fact-box {
+            background: linear-gradient(135deg, #FEF9E7, #FCF3CF);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--sun-yellow);
+            margin-top: 15px;
+        }
+
+        .fact-box h4 {
+            font-family: var(--primary-font);
+            color: #D68910;
+            margin-bottom: 10px;
+        }
+
+        /* Parent Dashboard */
+        .dashboard {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+
+        .progress-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .progress-card {
+            background: linear-gradient(135deg, var(--progress-color-1), var(--progress-color-2));
+            padding: 25px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .progress-card h3 {
+            font-family: var(--primary-font);
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            background: white;
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1s ease-out;
+        }
+
+        .milestone-list {
+            margin-top: 30px;
+        }
+
+        .milestone {
+            background: #F8F9FA;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--grass-green);
+        }
+
+        .milestone.completed {
+            opacity: 0.7;
+        }
+
+        .milestone h4 {
+            font-family: var(--primary-font);
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+
+        /* Learning Activities */
+        .activity-card {
+            background: #F8F9FA;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .activity-card:hover {
+            background: #E8F8F5;
+            transform: translateX(10px);
+        }
+
+        .activity-card h4 {
+            font-family: var(--primary-font);
+            color: var(--ocean-blue);
+            margin-bottom: 10px;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .difficulty-badge.easy {
+            background: #D5F4E6;
+            color: #27AE60;
+        }
+
+        .difficulty-badge.medium {
+            background: #FCF3CF;
+            color: #D68910;
+        }
+
+        .difficulty-badge.hard {
+            background: #FADBD8;
+            color: #E74C3C;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .welcome h1 {
+                font-size: 36px;
+            }
+
+            .biome-grid,
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--grass-green);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating clouds -->
+    <div class="clouds">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">Fehu Learning</div>
+        <nav>
+            <button class="nav-btn child" onclick="showChildView()">🎨 Learning Zone</button>
+            <button class="nav-btn parent" onclick="showParentView()">📊 Parent Dashboard</button>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Child View -->
+        <div id="childView">
+            <div class="welcome">
+                <h1>Welcome to Your Learning Adventure! 🌟</h1>
+                <p>Explore amazing worlds, discover incredible creatures, and learn something new every day!</p>
+            </div>
+
+            <!-- World Explorer Section -->
+            <div class="world-explorer">
+                <h2 class="section-title">🗺️ Explore the World</h2>
+                <div class="biome-grid">
+                    <div class="biome-card desert" onclick="openBiome('desert')">
+                        <span class="biome-icon">🏜️</span>
+                        <h3>Desert</h3>
+                        <p>Hot, dry, and full of amazing survivors! Meet camels, scorpions, and cacti.</p>
+                        <div class="biome-details">15 animals • 12 plants • 8 activities</div>
+                    </div>
+
+                    <div class="biome-card rainforest" onclick="openBiome('rainforest')">
+                        <span class="biome-icon">🌳</span>
+                        <h3>Rainforest</h3>
+                        <p>Rainy, green, and buzzing with life! Explore jaguars, toucans, and exotic flowers.</p>
+                        <div class="biome-details">25 animals • 20 plants • 12 activities</div>
+                    </div>
+
+                    <div class="biome-card ocean" onclick="openBiome('ocean')">
+                        <span class="biome-icon">🌊</span>
+                        <h3>Ocean</h3>
+                        <p>Deep, blue, and mysterious! Dive with dolphins, sharks, and colorful coral.</p>
+                        <div class="biome-details">30 animals • 15 plants • 10 activities</div>
+                    </div>
+
+                    <div class="biome-card arctic" onclick="openBiome('arctic')">
+                        <span class="biome-icon">❄️</span>
+                        <h3>Arctic</h3>
+                        <p>Cold, icy, and beautiful! Visit polar bears, penguins, and arctic foxes.</p>
+                        <div class="biome-details">12 animals • 8 plants • 8 activities</div>
+                    </div>
+
+                    <div class="biome-card grassland" onclick="openBiome('grassland')">
+                        <span class="biome-icon">🦁</span>
+                        <h3>Grassland</h3>
+                        <p>Wide, grassy, and wild! Meet lions, zebras, and grazing animals.</p>
+                        <div class="biome-details">20 animals • 10 plants • 10 activities</div>
+                    </div>
+
+                    <div class="biome-card mountain" onclick="openBiome('mountain')">
+                        <span class="biome-icon">⛰️</span>
+                        <h3>Mountain</h3>
+                        <p>High, rocky, and adventurous! Climb with eagles, mountain goats, and pine trees.</p>
+                        <div class="biome-details">18 animals • 14 plants • 9 activities</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Areas -->
+            <div class="world-explorer">
+                <h2 class="section-title">📚 What Would You Like to Learn Today?</h2>
+                <div class="subject-grid">
+                    <div class="subject-card maths" onclick="openSubject('maths')">
+                        <div class="subject-icon">🔢</div>
+                        <h3>Maths</h3>
+                        <p>Numbers, counting, shapes, patterns & problem solving</p>
+                    </div>
+
+                    <div class="subject-card english" onclick="openSubject('english')">
+                        <div class="subject-icon">📖</div>
+                        <h3>English</h3>
+                        <p>Reading, writing, phonics & storytelling</p>
+                    </div>
+
+                    <div class="subject-card science" onclick="openSubject('science')">
+                        <div class="subject-icon">🔬</div>
+                        <h3>Science</h3>
+                        <p>Experiments, how things work & discoveries</p>
+                    </div>
+
+                    <div class="subject-card nature" onclick="openSubject('nature')">
+                        <div class="subject-icon">🌿</div>
+                        <h3>Nature Studies</h3>
+                        <p>Plants, animals, life cycles & ecosystems</p>
+                    </div>
+
+                    <div class="subject-card geography" onclick="openSubject('geography')">
+                        <div class="subject-icon">🌏</div>
+                        <h3>Geography</h3>
+                        <p>Countries, cultures, maps & landmarks</p>
+                    </div>
+
+                    <div class="subject-card wellbeing" onclick="openSubject('wellbeing')">
+                        <div class="subject-icon">💚</div>
+                        <h3>Wellbeing</h3>
+                        <p>Health, emotions, mindfulness & nutrition</p>
+                    </div>
+
+                    <div class="subject-card creative" onclick="openSubject('creative')">
+                        <div class="subject-icon">🎨</div>
+                        <h3>Creative Arts</h3>
+                        <p>Drawing, music, crafts & imagination</p>
+                    </div>
+
+                    <div class="subject-card life-skills" onclick="openSubject('life-skills')">
+                        <div class="subject-icon">🌟</div>
+                        <h3>Life Skills</h3>
+                        <p>Problem solving, kindness & growing up</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent Dashboard View -->
+        <div id="parentView" class="hidden">
+            <div class="dashboard">
+                <h2 class="section-title">📊 Learning Progress Dashboard</h2>
+                
+                <div class="progress-overview">
+                    <div class="progress-card" style="--progress-color-1: #E74C3C; --progress-color-2: #C0392B;">
+                        <h3>🔢 Mathematics</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <p>75% Complete • Level 3 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: Addition & Subtraction (1-20)</p>
+                    </div>
+
+                    <div class="progress-card" style="--progress-color-1: #3498DB; --progress-color-2: #2980B9;">
+                        <h3>📖 English & Literacy</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 68%"></div>
+                        </div>
+                        <p>68% Complete • Level 2 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: CVC Words & Simple Sentences</p>
+                    </div>
+
+                    <div class="progress-card" style="--progress-color-1: #27AE60; --progress-color-2: #229954;">
+                        <h3>🌿 Nature Studies</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 82%"></div>
+                        </div>
+                        <p>82% Complete • Level 4 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: Animal Habitats & Adaptation</p>
+                    </div>
+
+                    <div class="progress-card" style="--progress-color-1: #9B59B6; --progress-color-2: #8E44AD;">
+                        <h3>🔬 Science</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <p>60% Complete • Level 2 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: Life Cycles & Living Things</p>
+                    </div>
+                </div>
+
+                <h3 style="font-family: var(--primary-font); font-size: 28px; margin: 40px 0 20px;">🎯 Current Milestones (Ages 4-7)</h3>
+                
+                <div class="milestone-list">
+                    <div class="milestone completed">
+                        <h4>✅ Number Recognition (1-20)</h4>
+                        <p>Completed: Recognizes and can write numbers 1-20 independently</p>
+                        <small>Achieved on: May 10, 2026</small>
+                    </div>
+
+                    <div class="milestone">
+                        <h4>🎯 Basic Addition (In Progress)</h4>
+                        <p>Working on: Adding numbers up to 10 using objects and visual aids</p>
+                        <small>Target: June 2026 • 70% complete</small>
+                    </div>
+
+                    <div class="milestone">
+                        <h4>📚 Reading CVC Words</h4>
+                        <p>Next up: Blending consonant-vowel-consonant words (cat, dog, sun)</p>
+                        <small>Target: June 2026</small>
+                    </div>
+
+                    <div class="milestone">
+                        <h4>🌍 World Geography Basics</h4>
+                        <p>Next up: Identifying continents and major oceans</p>
+                        <small>Target: July 2026</small>
+                    </div>
+                </div>
+
+                <h3 style="font-family: var(--primary-font); font-size: 28px; margin: 40px 0 20px;">📅 Recent Activities</h3>
+
+                <div class="activity-card">
+                    <h4>🏜️ Desert Ecosystem Exploration</h4>
+                    <p>Learned about 8 desert animals, their adaptations, and survival strategies</p>
+                    <span class="difficulty-badge medium">Age 5-6</span>
+                    <small style="display: block; margin-top: 10px; color: #7F8C8D;">Completed: May 18, 2026 • Duration: 25 minutes</small>
+                </div>
+
+                <div class="activity-card">
+                    <h4>🔢 Counting & Pattern Recognition</h4>
+                    <p>Practiced skip counting by 2s and 5s, identified number patterns</p>
+                    <span class="difficulty-badge easy">Age 4-5</span>
+                    <small style="display: block; margin-top: 10px; color: #7F8C8D;">Completed: May 17, 2026 • Duration: 15 minutes</small>
+                </div>
+
+                <div class="activity-card">
+                    <h4>🌿 Plant Life Cycles</h4>
+                    <p>Observed seed germination, plant growth stages from seed to flower</p>
+                    <span class="difficulty-badge medium">Age 6-7</span>
+                    <small style="display: block; margin-top: 10px; color: #7F8C8D;">Completed: May 16, 2026 • Duration: 30 minutes</small>
+                </div>
+
+                <h3 style="font-family: var(--primary-font); font-size: 28px; margin: 40px 0 20px;">💡 Recommended Next Steps</h3>
+
+                <div class="fact-box">
+                    <h4>Suggested Focus Areas:</h4>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Mathematics:</strong> Continue with addition practice using number lines and counters</li>
+                        <li><strong>Reading:</strong> Introduce simple sight words (the, and, is, to) alongside phonics</li>
+                        <li><strong>Science:</strong> Explore water cycle with hands-on evaporation experiments</li>
+                        <li><strong>Social-Emotional:</strong> Practice sharing and turn-taking through cooperative games</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: #EBF5FB; border-radius: 15px;">
+                    <h4 style="font-family: var(--primary-font); color: var(--ocean-blue); margin-bottom: 10px;">📈 Learning Insights</h4>
+                    <p><strong>Strengths:</strong> Excellent visual learner, strong interest in nature and animals, good attention span for hands-on activities</p>
+                    <p style="margin-top: 10px;"><strong>Growth Areas:</strong> Building confidence with early writing, practicing patience with multi-step problems</p>
+                    <p style="margin-top: 10px;"><strong>Engagement:</strong> Most active during morning sessions (9-11am), prefers interactive games over passive videos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biome Modal -->
+    <div id="biomeModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div id="biomeContent"></div>
+        </div>
+    </div>
+
+    <!-- Subject Modal -->
+    <div id="subjectModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div id="subjectContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive biome data
+        const biomeData = {
+            desert: {
+                name: 'Desert',
+                icon: '🏜️',
+                description: 'Deserts are hot, dry places with very little rain. Only the toughest plants and animals can survive here!',
+                climate: 'Hot days (up to 50°C!), cold nights, less than 25cm of rain per year',
+                animals: [
+                    { emoji: '🐪', name: 'Camel', role: 'Herbivore', fact: 'Can drink 100 liters of water in 10 minutes! Stores fat in hump for energy.' },
+                    { emoji: '🦂', name: 'Scorpion', role: 'Predator', fact: 'Hunts at night, glows under UV light! Has been around for 400 million years.' },
+                    { emoji: '🦎', name: 'Desert Lizard', role: 'Insectivore', fact: 'Does a special dance to keep feet cool on hot sand!' },
+                    { emoji: '🦅', name: 'Desert Eagle', role: 'Predator', fact: 'Can spot prey from 2 miles away! Dives at 150mph.' },
+                    { emoji: '🐍', name: 'Rattlesnake', role: 'Predator', fact: 'Uses heat sensors to hunt in the dark. Shakes tail as warning!' },
+                    { emoji: '🦊', name: 'Fennec Fox', role: 'Omnivore', fact: 'Has HUGE ears to stay cool and hear prey underground!' },
+                    { emoji: '🦗', name: 'Desert Cricket', role: 'Decomposer', fact: 'Makes music by rubbing legs together. Breaks down dead plants!' },
+                    { emoji: '🦘', name: 'Kangaroo Rat', role: 'Herbivore', fact: 'Never needs to drink water! Gets it all from seeds.' },
+                ],
+                plants: [
+                    { name: '🌵 Saguaro Cactus', uses: 'Stores water in stem, provides homes for birds', healing: 'Native people used for food and medicine' },
+                    { name: '🌿 Creosote Bush', uses: 'One of oldest living plants (11,000 years!)', healing: 'Used for pain relief and skin conditions' },
+                    { name: '🌼 Desert Marigold', uses: 'Bright yellow flowers attract pollinators', healing: 'Seeds were eaten by Native Americans' },
+                    { name: '🪴 Aloe Vera', uses: 'Stores water in thick leaves', healing: 'Soothes burns, helps cuts heal faster!' },
+                ],
+                funFacts: [
+                    'Deserts cover 1/3 of Earth\'s land!',
+                    'Antarctica is the world\'s largest desert (it\'s cold but super dry!)',
+                    'Some deserts have sand dunes as tall as buildings',
+                    'Desert animals are mostly nocturnal (active at night) to avoid the heat'
+                ],
+                activities: [
+                    '🎨 Draw a desert food chain',
+                    '💧 Water cycle experiment: See how cacti store water',
+                    '🔢 Count and sort desert animals by diet',
+                    '📖 Write a story from a camel\'s perspective',
+                    '🧪 Make a mini desert in a jar',
+                    '🎵 Learn about desert cultures and music',
+                    '🗺️ Map where deserts are in the world',
+                    '🌡️ Temperature comparison: Day vs Night'
+                ]
+            },
+            rainforest: {
+                name: 'Rainforest',
+                icon: '🌳',
+                description: 'Rainforests are wet, warm, and FULL of life! More species live here than anywhere else on Earth!',
+                climate: 'Hot and humid all year, 2-4 meters of rain annually, 20-25°C temperature',
+                animals: [
+                    { emoji: '🐒', name: 'Spider Monkey', role: 'Frugivore', fact: 'Uses tail like a 5th hand! Can hang and eat at same time.' },
+                    { emoji: '🐆', name: 'Jaguar', role: 'Apex Predator', fact: 'Strongest bite of all big cats! Can crunch through turtle shells.' },
+                    { emoji: '🦜', name: 'Toucan', role: 'Frugivore', fact: 'Giant colorful beak helps regulate body temperature!' },
+                    { emoji: '🦎', name: 'Poison Dart Frog', role: 'Insectivore', fact: 'Bright colors warn "Don\'t eat me, I\'m poisonous!"' },
+                    { emoji: '🦥', name: 'Sloth', role: 'Herbivore', fact: 'So slow that algae grows on its fur! Sleeps 15 hours a day.' },
+                    { emoji: '🦋', name: 'Morpho Butterfly', role: 'Nectarivore', fact: 'Wings aren\'t actually blue - they reflect light!' },
+                    { emoji: '🐍', name: 'Anaconda', role: 'Predator', fact: 'Largest snake in the world! Can weigh 250kg.' },
+                    { emoji: '🦜', name: 'Macaw', role: 'Herbivore', fact: 'Can live 50+ years! Mates for life with one partner.' },
+                    { emoji: '🐜', name: 'Leafcutter Ant', role: 'Fungus Farmer', fact: 'Farms mushrooms underground! Carries 50x its weight.' },
+                ],
+                plants: [
+                    { name: '🌺 Orchid', uses: 'Over 30,000 species! Grows on trees', healing: 'Used in vanilla and many medicines' },
+                    { name: '🍌 Banana Tree', uses: 'Fruit we eat, leaves for cooking/wrapping', healing: 'Rich in potassium, helps muscles work' },
+                    { name: '☕ Cacao Tree', uses: 'Where chocolate comes from!', healing: 'Contains antioxidants, boosts mood' },
+                    { name: '🌿 Bamboo', uses: 'Fastest growing plant (3ft in 24 hours!)', healing: 'Used in construction, food, and medicine' },
+                    { name: '🌴 Rubber Tree', uses: 'Produces latex for rubber', healing: 'Sap used for waterproofing and bandages' },
+                ],
+                funFacts: [
+                    'Rainforests produce 20% of Earth\'s oxygen!',
+                    '50% of all plant and animal species live in rainforests',
+                    'A patch the size of a football field is lost every second',
+                    'The Amazon River holds more water than the next 7 largest rivers combined!'
+                ],
+                activities: [
+                    '🎨 Create a rainforest layers poster (floor, understory, canopy, emergent)',
+                    '🔊 Listen to rainforest sounds and identify animals',
+                    '🌱 Grow your own rainforest plant from a seed',
+                    '📖 Read about indigenous tribes and their knowledge',
+                    '🔢 Counting game: How many species can you name?',
+                    '🧪 Make a terrarium ecosystem',
+                    '🎭 Act out the water cycle in the rainforest',
+                    '🗺️ Locate rainforests on a world map'
+                ]
+            },
+            ocean: {
+                name: 'Ocean',
+                icon: '🌊',
+                description: 'Oceans cover 71% of Earth! They\'re home to millions of creatures, from tiny plankton to giant whales!',
+                climate: 'Varies by depth and location, surface averages 17°C, deep ocean near freezing',
+                animals: [
+                    { emoji: '🐋', name: 'Blue Whale', role: 'Filter Feeder', fact: 'Largest animal EVER! Heart is size of a car, tongue weighs as much as an elephant!' },
+                    { emoji: '🦈', name: 'Great White Shark', role: 'Apex Predator', fact: 'Can detect a drop of blood from 3 miles away! Has 300 teeth in rows.' },
+                    { emoji: '🐬', name: 'Dolphin', role: 'Predator', fact: 'Super smart! Uses echolocation like sonar. Sleeps with half brain at a time!' },
+                    { emoji: '🐙', name: 'Octopus', role: 'Predator', fact: 'Has 3 hearts and blue blood! Can change color and squeeze through tiny holes.' },
+                    { emoji: '🐢', name: 'Sea Turtle', role: 'Omnivore', fact: 'Can live 100+ years! Returns to same beach where it was born to lay eggs.' },
+                    { emoji: '🦀', name: 'Hermit Crab', role: 'Scavenger', fact: 'Lives in borrowed shells! Trades up to bigger shells as it grows.' },
+                    { emoji: '🦑', name: 'Giant Squid', role: 'Predator', fact: 'Eyes are size of basketballs! Can grow up to 43 feet long.' },
+                    { emoji: '🐠', name: 'Clownfish', role: 'Omnivore', fact: 'Lives in sea anemones! Protected by special mucus coating.' },
+                    { emoji: '🦐', name: 'Krill', role: 'Filter Feeder', fact: 'Tiny but mighty! Main food for whales. Billions swim together.' },
+                    { emoji: '⭐', name: 'Starfish', role: 'Predator', fact: 'Can regrow lost arms! Stomach comes OUT of body to digest food!' },
+                ],
+                plants: [
+                    { name: '🌊 Kelp Forest', uses: 'Giant seaweed, grows 2 feet per day!', healing: 'Rich in iodine, vitamins, helps thyroid health' },
+                    { name: '🪸 Coral (Animal-Plant Team!)', uses: 'Home to 25% of ocean species!', healing: 'Used in bone grafts, cancer research' },
+                    { name: '🌿 Seagrass', uses: 'Provides oxygen, nursery for baby fish', healing: 'Absorbs carbon dioxide, fights climate change' },
+                    { name: '🟢 Phytoplankton', uses: 'Microscopic plants, base of food chain', healing: 'Produces 50% of Earth\'s oxygen!' },
+                ],
+                funFacts: [
+                    'We\'ve explored less than 5% of the ocean!',
+                    'The ocean has mountains taller than Everest - underwater!',
+                    'Sound travels 4x faster in water than air',
+                    'There\'s enough gold in the ocean to give everyone 9 pounds!'
+                ],
+                activities: [
+                    '🎨 Draw ocean zones: sunlight, twilight, midnight, abyss',
+                    '🔢 Math: If a whale eats 4 tons of krill per day, how much per week?',
+                    '🧪 Salt water vs fresh water density experiment',
+                    '📖 Write an adventure story diving to the ocean floor',
+                    '🗺️ Map the world\'s five oceans',
+                    '♻️ Learn about ocean pollution and how to help',
+                    '🎭 Make paper plate sea creatures',
+                    '🌊 Learn about tides and moon phases'
+                ]
+            },
+            arctic: {
+                name: 'Arctic',
+                icon: '❄️',
+                description: 'The Arctic is freezing cold, covered in ice and snow! Animals here have special adaptations to survive.',
+                climate: 'Winter: -40°C, Summer: 0-10°C, very little rain/snow, 6 months of darkness!',
+                animals: [
+                    { emoji: '🐻‍❄️', name: 'Polar Bear', role: 'Apex Predator', fact: 'Fur is actually clear, not white! Black skin underneath absorbs heat.' },
+                    { emoji: '🦭', name: 'Seal', role: 'Carnivore', fact: 'Can hold breath for 2 hours! Thick blubber keeps them warm.' },
+                    { emoji: '🐧', name: 'Penguin', role: 'Carnivore', fact: 'Can swim 22mph! Huddle together to stay warm in -60°C!' },
+                    { emoji: '🦊', name: 'Arctic Fox', role: 'Omnivore', fact: 'Changes coat color: white in winter, brown in summer! Warmest fur of all mammals.' },
+                    { emoji: '🦌', name: 'Caribou/Reindeer', role: 'Herbivore', fact: 'Eyes change color with seasons! Migrate 3,000 miles per year.' },
+                    { emoji: '🐋', name: 'Narwhal', role: 'Carnivore', fact: 'The unicorn of the sea! Tusk is actually a tooth up to 10 feet long.' },
+                    { emoji: '🦉', name: 'Snowy Owl', role: 'Predator', fact: 'Can hunt in total darkness! Feathers on feet keep toes warm.' },
+                    { emoji: '🦭', name: 'Walrus', role: 'Carnivore', fact: 'Tusks are teeth up to 3 feet long! Can weigh as much as a car.' },
+                ],
+                plants: [
+                    { name: '🌿 Arctic Moss', uses: 'One of few plants that grows here', healing: 'Used by caribou as main food source' },
+                    { name: '🌸 Arctic Poppy', uses: 'Flowers follow the sun for warmth', healing: 'Seeds eaten by birds, used in traditional medicine' },
+                    { name: '🍒 Bearberry', uses: 'Red berries stay on plant all winter', healing: 'Used for urinary tract health, rich in Vitamin C' },
+                    { name: '🌾 Arctic Willow', uses: 'World\'s smallest tree (grows along ground!)', healing: 'Bark used for pain relief, like aspirin' },
+                ],
+                funFacts: [
+                    'Arctic means "near the bear" (for the polar bear!)',
+                    'Ice is melting due to climate change - polar bears losing homes',
+                    'Midnight sun: sun doesn\'t set for months in summer!',
+                    'No land underneath - it\'s frozen ocean!'
+                ],
+                activities: [
+                    '🎨 Draw adaptations: thick fur, blubber, small ears',
+                    '❄️ Make snowflake symmetry patterns',
+                    '🔢 Temperature math: negative numbers practice',
+                    '📖 Read Indigenous Arctic peoples\' stories',
+                    '🧪 Insulation experiment: How does blubber work?',
+                    '🌍 Climate change: What\'s happening to the Arctic?',
+                    '🗺️ Compare Arctic vs Antarctic',
+                    '⏰ Learn about 24-hour daylight and darkness'
+                ]
+            },
+            grassland: {
+                name: 'Grassland',
+                icon: '🦁',
+                description: 'Wide open spaces covered in grass! Home to some of the fastest runners and biggest herds on Earth!',
+                climate: 'Seasonal: hot summers (35°C), cold winters, 50-90cm rain per year, frequent fires',
+                animals: [
+                    { emoji: '🦁', name: 'Lion', role: 'Apex Predator', fact: 'King of beasts! Males roar can be heard 5 miles away. Females do most hunting!' },
+                    { emoji: '🦓', name: 'Zebra', role: 'Herbivore', fact: 'Every stripe pattern is unique like a fingerprint! Stripes confuse predators.' },
+                    { emoji: '🐘', name: 'Elephant', role: 'Herbivore', fact: 'Largest land animal! Remember everything, mourn their dead, super smart!' },
+                    { emoji: '🦒', name: 'Giraffe', role: 'Herbivore', fact: 'Tallest animal (18ft)! Heart weighs 25 pounds to pump blood up to brain!' },
+                    { emoji: '🦏', name: 'Rhinoceros', role: 'Herbivore', fact: 'Horn is made of keratin (like your hair!)! Can run 30mph despite huge size.' },
+                    { emoji: '🦬', name: 'Buffalo', role: 'Herbivore', fact: 'Migrate in huge herds (millions!)! Grasslands depend on them for fertilizer.' },
+                    { emoji: '🐆', name: 'Cheetah', role: 'Predator', fact: 'Fastest land animal! Can reach 70mph in 3 seconds. Can\'t roar, only purr!' },
+                    { emoji: '🦅', name: 'Vulture', role: 'Scavenger', fact: 'Nature\'s cleanup crew! Strong stomach acid dissolves dangerous bacteria.' },
+                    { emoji: '🐾', name: 'Meerkat', role: 'Omnivore', fact: 'Takes turns being lookout! Immune to scorpion and snake venom.' },
+                    { emoji: '🦘', name: 'Kangaroo', role: 'Herbivore', fact: 'Can jump 30 feet! Baby lives in pouch for 6 months.' },
+                ],
+                plants: [
+                    { name: '🌾 Prairie Grass', uses: 'Roots go 6 feet deep!', healing: 'Prevents soil erosion, feeds millions of animals' },
+                    { name: '🌻 Sunflower', uses: 'Follows the sun across sky', healing: 'Seeds rich in vitamin E, good for heart health' },
+                    { name: '🌿 Buffalo Grass', uses: 'Can survive being eaten to the ground', healing: 'Used to make tea for fevers' },
+                    { name: '🌺 Prairie Rose', uses: 'Beautiful pink flowers', healing: 'Rose hips full of Vitamin C, help immune system' },
+                ],
+                funFacts: [
+                    'Grasslands have many names: prairies, savannas, pampas, steppes!',
+                    'Natural fires are important - they help grass grow!',
+                    'Soil is very fertile - many grasslands became farmland',
+                    'More than 800 million people depend on grasslands'
+                ],
+                activities: [
+                    '🎨 Draw a grassland food web',
+                    '🏃 Speed comparison: Cheetah vs other animals',
+                    '🔢 Counting: How many animals in a herd?',
+                    '📖 Write from a zebra escaping a lion',
+                    '🌱 Plant grass seeds and measure growth',
+                    '🔥 Learn about controlled burns',
+                    '🗺️ Map grasslands around the world',
+                    '🎭 Act out predator-prey chase!'
+                ]
+            },
+            mountain: {
+                name: 'Mountain',
+                icon: '⛰️',
+                description: 'High places where the air is thin and weather changes fast! Only tough creatures live at the top!',
+                climate: 'Temperature drops 6°C per 1000m! Windy, lots of snow, weather changes quickly',
+                animals: [
+                    { emoji: '🦅', name: 'Golden Eagle', role: 'Apex Predator', fact: 'Can see 8x better than humans! Dives at 200mph to catch prey!' },
+                    { emoji: '🐐', name: 'Mountain Goat', role: 'Herbivore', fact: 'Amazing climbers! Hooves have soft inner pads for grip on rocks.' },
+                    { emoji: '🐻', name: 'Brown Bear', role: 'Omnivore', fact: 'Hibernates in winter! Can smell food from 20 miles away.' },
+                    { emoji: '🦌', name: 'Mountain Deer', role: 'Herbivore', fact: 'Males grow new antlers every year! Can jump 8 feet high.' },
+                    { emoji: '🐺', name: 'Wolf', role: 'Predator', fact: 'Lives in family packs! Howls to communicate with pack members.' },
+                    { emoji: '🦬', name: 'Yak', role: 'Herbivore', fact: 'Lives higher than almost any mammal! Thick coat keeps them warm.' },
+                    { emoji: '🦨', name: 'Marmot', role: 'Herbivore', fact: 'Whistles to warn of danger! Hibernates 8 months of the year!' },
+                    { emoji: '🦅', name: 'Condor', role: 'Scavenger', fact: 'Wingspan of 10 feet! Can soar for hours without flapping.' },
+                ],
+                plants: [
+                    { name: '🌲 Pine Tree', uses: 'Cone-shaped to shed snow', healing: 'Pine needles make vitamin C tea!' },
+                    { name: '🌸 Edelweiss', uses: 'Rare mountain flower', healing: 'Used for digestive problems, symbol of the Alps' },
+                    { name: '🍒 Mountain Berries', uses: 'Important food for bears and birds', healing: 'Full of antioxidants, boost immune system' },
+                    { name: '🌿 Alpine Grass', uses: 'Short and tough, grows slowly', healing: 'Roots prevent avalanches and erosion' },
+                ],
+                funFacts: [
+                    'Mt. Everest is 29,032 feet tall - tallest in the world!',
+                    'Mountains make their own weather!',
+                    'Half of world\'s fresh water comes from mountains',
+                    'Mountains cover 1/5 of Earth\'s land'
+                ],
+                activities: [
+                    '🎨 Draw mountain altitude zones',
+                    '📏 Height comparison: Mountains around the world',
+                    '🔢 Altitude math: How much colder at the top?',
+                    '📖 Read about mountain climbing adventures',
+                    '🧪 Air pressure experiment',
+                    '⛰️ Make a 3D mountain model',
+                    '🗺️ Identify famous mountain ranges',
+                    '❄️ Learn about avalanches and mountain safety'
+                ]
+            }
+        };
+
+        // Subject data
+        const subjectData = {
+            maths: {
+                name: 'Mathematics',
+                icon: '🔢',
+                description: 'Explore numbers, shapes, patterns, and problem-solving!',
+                topics: [
+                    {
+                        title: 'Number Sense (Age 4-5)',
+                        content: 'Counting 1-20, recognizing numerals, one-to-one correspondence, comparing quantities (more/less/same)',
+                        activities: ['🎲 Counting games with dice', '🧮 Number line hopping', '🎨 Number art projects', '🍪 Counting snacks']
+                    },
+                    {
+                        title: 'Addition & Subtraction (Age 5-6)',
+                        content: 'Adding/subtracting within 10, number bonds, using objects and fingers, beginning word problems',
+                        activities: ['🎯 Target number games', '🧩 Number bond puzzles', '📖 Story problems', '🎪 Missing number mysteries']
+                    },
+                    {
+                        title: 'Place Value (Age 6-7)',
+                        content: 'Understanding tens and ones, skip counting by 2s, 5s, 10s, comparing two-digit numbers',
+                        activities: ['🏗️ Building numbers with blocks', '💰 Counting coins', '📊 Place value charts', '🎵 Skip counting songs']
+                    },
+                    {
+                        title: 'Shapes & Geometry (Age 4-7)',
+                        content: '2D and 3D shapes, patterns, symmetry, spatial awareness, sorting and classifying',
+                        activities: ['🔺 Shape hunts', '🎨 Pattern creation', '🏗️ 3D building', '🦋 Symmetry art']
+                    },
+                    {
+                        title: 'Measurement (Age 5-7)',
+                        content: 'Length, weight, capacity, time (o\'clock, half past), money recognition',
+                        activities: ['📏 Measuring objects', '⏰ Clock practice', '💰 Shop role-play', '⚖️ Weight comparison']
+                    }
+                ],
+                funFacts: [
+                    'Zero was invented in India around 500 CE!',
+                    'A circle has infinite lines of symmetry',
+                    'The equals sign (=) was invented in 1557',
+                    'Your brain can do math without you thinking about it!'
+                ]
+            },
+            english: {
+                name: 'English & Literacy',
+                icon: '📖',
+                description: 'Reading, writing, storytelling, and communication!',
+                topics: [
+                    {
+                        title: 'Phonics (Age 4-5)',
+                        content: 'Letter sounds, beginning letter-sound matching, rhyming, oral blending',
+                        activities: ['🎵 Alphabet songs', '🎨 Letter crafts', '📚 Sound sorting', '🎤 Rhyme time']
+                    },
+                    {
+                        title: 'Early Reading (Age 5-6)',
+                        content: 'CVC words (cat, dog), blending sounds, sight words (the, and, is), simple sentences',
+                        activities: ['📖 Decodable books', '🎯 Sight word games', '🔤 Word building', '📝 Sentence writing']
+                    },
+                    {
+                        title: 'Reading Comprehension (Age 6-7)',
+                        content: 'Reading with fluency, understanding stories, making predictions, answering questions',
+                        activities: ['📚 Story discussions', '🎭 Story acting', '🖼️ Picture predictions', '❓ Question writing']
+                    },
+                    {
+                        title: 'Writing Skills (Age 5-7)',
+                        content: 'Letter formation, spelling CVC words, capital letters, full stops, simple stories',
+                        activities: ['✏️ Journal writing', '📝 Story writing', '✉️ Letter writing', '🎨 Comics creation']
+                    },
+                    {
+                        title: 'Vocabulary & Speaking (Age 4-7)',
+                        content: 'Building word knowledge, describing, speaking in full sentences, presentation skills',
+                        activities: ['🎤 Show and tell', '🗣️ Conversation games', '📖 Word of the day', '🎭 Drama activities']
+                    }
+                ],
+                funFacts: [
+                    'English has about 170,000 words in current use!',
+                    'The shortest complete sentence is "I am"',
+                    'Shakespeare invented over 1,700 words we still use today',
+                    'Reading to children grows their vocabulary faster than conversation!'
+                ]
+            },
+            science: {
+                name: 'Science',
+                icon: '🔬',
+                description: 'Discover how the world works through experiments and exploration!',
+                topics: [
+                    {
+                        title: 'Living Things (Age 4-5)',
+                        content: 'Alive vs not alive, basic needs (food, water, air), animal babies, plant growth',
+                        activities: ['🌱 Plant a seed', '🐛 Observe a caterpillar', '🎨 Draw life cycles', '🔍 Nature walks']
+                    },
+                    {
+                        title: 'Human Body (Age 5-6)',
+                        content: 'Body parts, five senses, healthy eating, exercise, bones and muscles',
+                        activities: ['👂 Sense experiments', '🍎 Food sorting', '🏃 Movement activities', '🎨 Body tracing']
+                    },
+                    {
+                        title: 'Materials & Matter (Age 6-7)',
+                        content: 'Solid, liquid, gas, properties of materials, floating and sinking, magnets',
+                        activities: ['🧊 Ice melting', '🧲 Magnet hunts', '🛁 Sink/float tests', '🔬 Material sorting']
+                    },
+                    {
+                        title: 'Weather & Seasons (Age 5-7)',
+                        content: 'Four seasons, weather types, water cycle, temperature, how weather affects us',
+                        activities: ['☔ Rain measurement', '🌡️ Temperature tracking', '☁️ Cloud watching', '🌈 Weather diary']
+                    },
+                    {
+                        title: 'Forces & Motion (Age 6-7)',
+                        content: 'Push and pull, speed, friction, gravity, simple machines',
+                        activities: ['🛷 Ramp experiments', '🏀 Bouncing balls', '🚗 Car races', '⚖️ Balance tests']
+                    }
+                ],
+                funFacts: [
+                    'You have about 10,000 taste buds!',
+                    'Bones are 4x stronger than concrete',
+                    'Lightning is 5x hotter than the sun',
+                    'Your heart beats 100,000 times per day!'
+                ]
+            },
+            nature: {
+                name: 'Nature Studies',
+                icon: '🌿',
+                description: 'Learn about plants, animals, habitats, and ecosystems!',
+                topics: [
+                    {
+                        title: 'Animal Classification (Age 5-7)',
+                        content: 'Mammals, birds, fish, reptiles, amphibians, insects - how to identify them',
+                        activities: ['🐾 Animal sorting', '🦋 Insect observation', '🐟 Habitat matching', '📚 Animal research']
+                    },
+                    {
+                        title: 'Life Cycles (Age 5-6)',
+                        content: 'Butterfly metamorphosis, frog life cycle, plant growth from seed to flower',
+                        activities: ['🐛 Raise butterflies', '🌱 Grow beans', '📖 Life cycle books', '🎨 Sequence drawing']
+                    },
+                    {
+                        title: 'Food Chains (Age 6-7)',
+                        content: 'Producers, consumers, predators, prey, decomposers, energy flow',
+                        activities: ['🎨 Create food webs', '🎭 Predator-prey games', '🔬 Decomposition observation', '📊 Chain diagrams']
+                    },
+                    {
+                        title: 'Plant Science (Age 5-7)',
+                        content: 'Parts of plants, what plants need, pollination, seed dispersal, uses of plants',
+                        activities: ['🌻 Dissect flowers', '🌱 Growing experiments', '🐝 Pollinator study', '🎨 Leaf printing']
+                    },
+                    {
+                        title: 'Conservation (Age 6-7)',
+                        content: 'Endangered animals, habitat loss, recycling, water conservation, helping wildlife',
+                        activities: ['♻️ Recycling projects', '🏠 Build bug hotels', '🌳 Plant trees', '💧 Water saving']
+                    }
+                ],
+                funFacts: [
+                    'A bee visits 5,000 flowers to make 1 teaspoon of honey!',
+                    'Bamboo can grow 3 feet in ONE day',
+                    'Octopuses have 3 hearts and blue blood',
+                    'One tree can absorb 48 pounds of CO2 per year!'
+                ]
+            },
+            geography: {
+                name: 'Geography',
+                icon: '🌏',
+                description: 'Explore the world: countries, cultures, maps, and landmarks!',
+                topics: [
+                    {
+                        title: 'Map Skills (Age 5-7)',
+                        content: 'Simple maps, cardinal directions, keys/legends, aerial views, your address',
+                        activities: ['🗺️ Draw neighborhood maps', '🧭 Treasure hunts', '📍 Location games', '🏠 Address practice']
+                    },
+                    {
+                        title: 'Continents & Oceans (Age 6-7)',
+                        content: 'Seven continents, five oceans, basic world geography, equator',
+                        activities: ['🧩 World puzzles', '🌍 Continent songs', '🎨 Map coloring', '📚 Country books']
+                    },
+                    {
+                        title: 'Countries & Cultures (Age 6-7)',
+                        content: 'Different countries, languages, celebrations, traditional clothing, foods',
+                        activities: ['🎉 Cultural festivals', '🍜 World foods', '🎨 Flag making', '🎵 World music']
+                    },
+                    {
+                        title: 'Physical Features (Age 5-7)',
+                        content: 'Mountains, rivers, deserts, forests, islands, volcanoes',
+                        activities: ['🏔️ Model making', '🌋 Volcano experiments', '💧 River creation', '🏝️ Island study']
+                    },
+                    {
+                        title: 'Weather & Climate (Age 5-7)',
+                        content: 'Different climates, how location affects weather, seasons around world',
+                        activities: ['🌡️ Climate comparison', '🗓️ Season tracking', '☔ Weather patterns', '🌍 Climate zones']
+                    }
+                ],
+                funFacts: [
+                    'Africa is splitting into two continents!',
+                    'Russia spans 11 time zones',
+                    'The Pacific Ocean is bigger than all land combined',
+                    'Mount Everest grows 4mm taller every year!'
+                ]
+            },
+            wellbeing: {
+                name: 'Health & Wellbeing',
+                icon: '💚',
+                description: 'Learn about health, emotions, mindfulness, and taking care of yourself!',
+                topics: [
+                    {
+                        title: 'Emotions (Age 4-5)',
+                        content: 'Naming feelings, recognizing emotions in others, coping strategies, asking for help',
+                        activities: ['😊 Emotion faces', '📖 Feelings books', '🎭 Role play', '🎨 Emotion art']
+                    },
+                    {
+                        title: 'Healthy Habits (Age 5-7)',
+                        content: 'Nutrition basics, exercise, sleep importance, dental care, hand washing',
+                        activities: ['🍎 Food group sorting', '🏃 Exercise games', '🦷 Brushing practice', '💧 Hygiene routines']
+                    },
+                    {
+                        title: 'Mindfulness (Age 5-7)',
+                        content: 'Breathing exercises, body awareness, gratitude, present moment focus',
+                        activities: ['🧘 Breathing exercises', '🙏 Gratitude journal', '🌸 Mindful walking', '🎵 Calm music']
+                    },
+                    {
+                        title: 'Relationships (Age 5-7)',
+                        content: 'Friendship skills, sharing, taking turns, empathy, conflict resolution',
+                        activities: ['🤝 Cooperation games', '💬 Social stories', '🎭 Problem-solving', '❤️ Kindness acts']
+                    },
+                    {
+                        title: 'Herbal Remedies (Age 6-7)',
+                        content: 'Safe plants that help us (chamomile for calm, aloe for burns, mint for tummy)',
+                        activities: ['🌿 Herb garden', '🍵 Making tea', '🌸 Plant identification', '📖 Herb uses']
+                    }
+                ],
+                funFacts: [
+                    'Laughing for 10-15 minutes burns 50 calories!',
+                    'Your body has 37 trillion cells',
+                    'Smiling uses fewer muscles than frowning',
+                    'Chamomile has been used for 5,000 years!'
+                ]
+            },
+            creative: {
+                name: 'Creative Arts',
+                icon: '🎨',
+                description: 'Express yourself through art, music, crafts, and imagination!',
+                topics: [
+                    {
+                        title: 'Visual Arts (Age 4-7)',
+                        content: 'Drawing, painting, collage, sculpture, color mixing, texture exploration',
+                        activities: ['🖌️ Paint mixing', '✂️ Collage making', '🏺 Clay modeling', '🖍️ Drawing challenges']
+                    },
+                    {
+                        title: 'Music (Age 4-7)',
+                        content: 'Rhythm, pitch, making instruments, songs from cultures, movement to music',
+                        activities: ['🥁 Rhythm games', '🎵 Song learning', '🎺 Instrument making', '💃 Dance activities']
+                    },
+                    {
+                        title: 'Drama (Age 5-7)',
+                        content: 'Role play, storytelling, puppets, acting out stories, voice expression',
+                        activities: ['🎭 Story acting', '🧸 Puppet shows', '👥 Character games', '🎬 Story creation']
+                    },
+                    {
+                        title: 'Creative Writing (Age 6-7)',
+                        content: 'Story writing, poetry, journals, comics, descriptive language',
+                        activities: ['📖 Story starters', '🖼️ Comic strips', '📝 Poetry writing', '📔 Journals']
+                    },
+                    {
+                        title: 'Nature Crafts (Age 5-7)',
+                        content: 'Using natural materials, leaf printing, flower pressing, rock painting',
+                        activities: ['🍂 Leaf art', '🌸 Pressed flowers', '🪨 Rock painting', '🌿 Nature mandalas']
+                    }
+                ],
+                funFacts: [
+                    'Music can change your heart rate!',
+                    'Colors affect your mood',
+                    'Pablo Picasso created 50,000 artworks in his lifetime',
+                    'Drawing helps your brain remember things!'
+                ]
+            },
+            'life-skills': {
+                name: 'Life Skills',
+                icon: '🌟',
+                description: 'Problem-solving, growth mindset, responsibility, and practical skills!',
+                topics: [
+                    {
+                        title: 'Problem Solving (Age 5-7)',
+                        content: 'Thinking through challenges, trying different solutions, persistence',
+                        activities: ['🧩 Puzzle challenges', '🎯 Strategy games', '🔧 Fix-it activities', '💡 Brain teasers']
+                    },
+                    {
+                        title: 'Growth Mindset (Age 5-7)',
+                        content: 'Yet vs never, learning from mistakes, effort > natural ability, challenges are opportunities',
+                        activities: ['💪 Challenge tracking', '📚 Mistake stories', '🌱 Growth talk', '⭐ Effort celebration']
+                    },
+                    {
+                        title: 'Responsibility (Age 5-7)',
+                        content: 'Chores, taking care of belongings, following through, helping others',
+                        activities: ['🧹 Chore charts', '🎒 Packing practice', '🤝 Helper jobs', '📋 Task completion']
+                    },
+                    {
+                        title: 'Time Management (Age 6-7)',
+                        content: 'Routines, sequencing tasks, estimating time, prioritizing',
+                        activities: ['⏰ Morning routines', '📅 Visual schedules', '⏱️ Time estimation', '📝 Task ordering']
+                    },
+                    {
+                        title: 'Practical Skills (Age 5-7)',
+                        content: 'Tying shoes, buttoning, zipping, basic cooking safety, table manners',
+                        activities: ['👟 Shoe tying', '🍽️ Table setting', '🥪 Simple cooking', '👔 Dressing practice']
+                    }
+                ],
+                funFacts: [
+                    'It takes 66 days to form a new habit',
+                    'Making mistakes helps your brain grow stronger!',
+                    'People who write down goals are 42% more likely to achieve them',
+                    'Being organized saves 1 hour per day!'
+                ]
+            }
+        };
+
+        // Modal functions
+        function openBiome(biomeKey) {
+            const biome = biomeData[biomeKey];
+            const content = `
+                <div class="modal-header">
+                    <span>${biome.icon}</span>
+                    <span>${biome.name}</span>
+                </div>
+                <p style="font-size: 18px; line-height: 1.6; margin-bottom: 20px;">${biome.description}</p>
+                
+                <div class="fact-box">
+                    <h4>🌡️ Climate</h4>
+                    <p>${biome.climate}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>🦁 Animals Living Here</h3>
+                    <div class="animal-grid">
+                        ${biome.animals.map(animal => `
+                            <div class="animal-item" onclick="alert('${animal.fact}')">
+                                <div class="animal-emoji">${animal.emoji}</div>
+                                <div class="animal-name">${animal.name}</div>
+                                <div class="animal-role">${animal.role}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="margin-top: 15px; font-size: 14px; color: #7F8C8D;">💡 Click any animal to learn an amazing fact!</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>🌿 Plants & Their Uses</h3>
+                    <div class="plant-grid">
+                        ${biome.plants.map(plant => `
+                            <div class="plant-item">
+                                <strong>${plant.name}</strong>
+                                <p style="margin-top: 5px; font-size: 14px;">📍 ${plant.uses}</p>
+                                <p style="margin-top: 5px; font-size: 14px; color: #27AE60;">💊 ${plant.healing}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>🤓 Did You Know?</h3>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        ${biome.funFacts.map(fact => `<li>${fact}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="modal-section">
+                    <h3>🎯 Learning Activities</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                        ${biome.activities.map(activity => `
+                            <div style="background: #F8F9FA; padding: 12px; border-radius: 10px; font-size: 14px;">
+                                ${activity}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('biomeContent').innerHTML = content;
+            document.getElementById('biomeModal').style.display = 'block';
+        }
+
+        function openSubject(subjectKey) {
+            const subject = subjectData[subjectKey];
+            const content = `
+                <div class="modal-header">
+                    <span style="font-size: 50px;">${subject.icon}</span>
+                    <span>${subject.name}</span>
+                </div>
+                <p style="font-size: 18px; line-height: 1.6; margin-bottom: 30px;">${subject.description}</p>
+
+                ${subject.topics.map(topic => `
+                    <div class="modal-section">
+                        <h3>${topic.title}</h3>
+                        <p style="line-height: 1.7; margin-bottom: 15px;">${topic.content}</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            ${topic.activities.map(activity => `
+                                <div style="background: #E8F8F5; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500;">
+                                    ${activity}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+
+                <div class="fact-box">
+                    <h4>🤓 Fun Facts About ${subject.name}</h4>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        ${subject.funFacts.map(fact => `<li>${fact}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('subjectContent').innerHTML = content;
+            document.getElementById('subjectModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('biomeModal').style.display = 'none';
+            document.getElementById('subjectModal').style.display = 'none';
+        }
+
+        // View switching
+        function showChildView() {
+            document.getElementById('childView').classList.remove('hidden');
+            document.getElementById('parentView').classList.add('hidden');
+        }
+
+        function showParentView() {
+            document.getElementById('childView').classList.add('hidden');
+            document.getElementById('parentView').classList.remove('hidden');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+            }
+        }
+
+        // Initialize with child view
+        showChildView();
+    </script>
+</body>
+</html>
