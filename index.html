@@ -687,30 +687,253 @@
                 <span>🧙‍♂️</span>
                 <span>AI Teacher</span>
             </button>
-            <button class="nav-btn child" onclick="window.location.href='#learning'">🎨 Learning Zone</button>
-            <button class="nav-btn parent" onclick="window.location.href='#dashboard'">📊 Parent Dashboard</button>
+            <button class="nav-btn child" onclick="showChildView()">🎨 Learning Zone</button>
+            <button class="nav-btn parent" onclick="showParentView()">📊 Parent Dashboard</button>
         </nav>
     </header>
 
     <!-- Main Container -->
     <div class="container">
-        <div class="welcome">
-            <h1>Welcome to Your Learning Adventure! 🌟</h1>
-            <p>Explore amazing worlds, discover incredible creatures, and learn something new every day!</p>
-            <p class="subtitle">✨ Now with your own AI Homeschool Teacher to guide you!</p>
+        <!-- Child View -->
+        <div id="childView">
+            <div class="welcome">
+                <h1>Welcome to Your Learning Adventure! 🌟</h1>
+                <p>Explore amazing worlds, discover incredible creatures, and learn something new every day!</p>
+                <p class="subtitle">✨ Now with your own AI Homeschool Teacher to guide you!</p>
+            </div>
+
+            <!-- World Explorer Section -->
+            <div class="world-explorer" style="background: white; border-radius: 30px; padding: 40px; box-shadow: 0 10px 40px var(--shadow); margin-bottom: 40px;">
+                <h2 class="section-title" style="font-family: var(--primary-font); font-size: 36px; color: var(--ocean-blue); margin-bottom: 30px; text-align: center;">🗺️ Explore the World</h2>
+                <div class="biome-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                    <div class="biome-card desert" onclick="openBiome('desert')" style="background: linear-gradient(135deg, #F4D03F, #DC7633); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 5px 15px var(--shadow);">
+                        <span class="biome-icon" style="font-size: 60px; margin-bottom: 15px; display: block;">🏜️</span>
+                        <h3 style="font-family: var(--primary-font); font-size: 26px; color: white; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Desert</h3>
+                        <p style="font-size: 16px; color: rgba(255,255,255,0.95); line-height: 1.5;">Hot, dry, and full of amazing survivors! Meet camels, scorpions, and cacti.</p>
+                        <div class="biome-details" style="color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 10px; font-weight: 500;">15 animals • 12 plants • 8 activities</div>
+                    </div>
+
+                    <div class="biome-card rainforest" onclick="openBiome('rainforest')" style="background: linear-gradient(135deg, #52BE80, #196F3D); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 5px 15px var(--shadow);">
+                        <span class="biome-icon" style="font-size: 60px; margin-bottom: 15px; display: block;">🌳</span>
+                        <h3 style="font-family: var(--primary-font); font-size: 26px; color: white; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Rainforest</h3>
+                        <p style="font-size: 16px; color: rgba(255,255,255,0.95); line-height: 1.5;">Rainy, green, and buzzing with life! Explore jaguars, toucans, and exotic flowers.</p>
+                        <div class="biome-details" style="color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 10px; font-weight: 500;">25 animals • 20 plants • 12 activities</div>
+                    </div>
+
+                    <div class="biome-card ocean" onclick="openBiome('ocean')" style="background: linear-gradient(135deg, #5DADE2, #1B4F72); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 5px 15px var(--shadow);">
+                        <span class="biome-icon" style="font-size: 60px; margin-bottom: 15px; display: block;">🌊</span>
+                        <h3 style="font-family: var(--primary-font); font-size: 26px; color: white; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Ocean</h3>
+                        <p style="font-size: 16px; color: rgba(255,255,255,0.95); line-height: 1.5;">Deep, blue, and mysterious! Dive with dolphins, sharks, and colorful coral.</p>
+                        <div class="biome-details" style="color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 10px; font-weight: 500;">30 animals • 15 plants • 10 activities</div>
+                    </div>
+
+                    <div class="biome-card arctic" onclick="openBiome('arctic')" style="background: linear-gradient(135deg, #AED6F1, #5499C7); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 5px 15px var(--shadow);">
+                        <span class="biome-icon" style="font-size: 60px; margin-bottom: 15px; display: block;">❄️</span>
+                        <h3 style="font-family: var(--primary-font); font-size: 26px; color: white; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Arctic</h3>
+                        <p style="font-size: 16px; color: rgba(255,255,255,0.95); line-height: 1.5;">Cold, icy, and beautiful! Visit polar bears, penguins, and arctic foxes.</p>
+                        <div class="biome-details" style="color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 10px; font-weight: 500;">12 animals • 8 plants • 8 activities</div>
+                    </div>
+
+                    <div class="biome-card grassland" onclick="openBiome('grassland')" style="background: linear-gradient(135deg, #ABEBC6, #52BE80); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 5px 15px var(--shadow);">
+                        <span class="biome-icon" style="font-size: 60px; margin-bottom: 15px; display: block;">🦁</span>
+                        <h3 style="font-family: var(--primary-font); font-size: 26px; color: white; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Grassland</h3>
+                        <p style="font-size: 16px; color: rgba(255,255,255,0.95); line-height: 1.5;">Wide, grassy, and wild! Meet lions, zebras, and grazing animals.</p>
+                        <div class="biome-details" style="color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 10px; font-weight: 500;">20 animals • 10 plants • 10 activities</div>
+                    </div>
+
+                    <div class="biome-card mountain" onclick="openBiome('mountain')" style="background: linear-gradient(135deg, #B2BABB, #566573); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 5px 15px var(--shadow);">
+                        <span class="biome-icon" style="font-size: 60px; margin-bottom: 15px; display: block;">⛰️</span>
+                        <h3 style="font-family: var(--primary-font); font-size: 26px; color: white; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Mountain</h3>
+                        <p style="font-size: 16px; color: rgba(255,255,255,0.95); line-height: 1.5;">High, rocky, and adventurous! Climb with eagles, mountain goats, and pine trees.</p>
+                        <div class="biome-details" style="color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 10px; font-weight: 500;">18 animals • 14 plants • 9 activities</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Areas -->
+            <div class="world-explorer" style="background: white; border-radius: 30px; padding: 40px; box-shadow: 0 10px 40px var(--shadow);">
+                <h2 class="section-title" style="font-family: var(--primary-font); font-size: 36px; color: var(--ocean-blue); margin-bottom: 30px; text-align: center;">📚 What Would You Like to Learn Today?</h2>
+                <div class="subject-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 40px;">
+                    <div class="subject-card maths" onclick="openSubject('maths')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">🔢</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">Maths</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Numbers, counting, shapes, patterns & problem solving</p>
+                    </div>
+
+                    <div class="subject-card english" onclick="openSubject('english')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">📖</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">English</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Reading, writing, phonics & storytelling</p>
+                    </div>
+
+                    <div class="subject-card science" onclick="openSubject('science')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">🔬</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">Science</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Experiments, how things work & discoveries</p>
+                    </div>
+
+                    <div class="subject-card nature" onclick="openSubject('nature')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">🌿</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">Nature Studies</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Plants, animals, life cycles & ecosystems</p>
+                    </div>
+
+                    <div class="subject-card geography" onclick="openSubject('geography')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">🌏</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">Geography</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Countries, cultures, maps & landmarks</p>
+                    </div>
+
+                    <div class="subject-card wellbeing" onclick="openSubject('wellbeing')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">💚</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">Wellbeing</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Health, emotions, mindfulness & nutrition</p>
+                    </div>
+
+                    <div class="subject-card creative" onclick="openSubject('creative')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">🎨</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">Creative Arts</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Drawing, music, crafts & imagination</p>
+                    </div>
+
+                    <div class="subject-card life-skills" onclick="openSubject('life-skills')" style="background: white; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; box-shadow: 0 4px 15px var(--shadow);">
+                        <div class="subject-icon" style="font-size: 50px; margin-bottom: 15px;">🌟</div>
+                        <h3 style="font-family: var(--primary-font); font-size: 22px; color: #2C3E50; margin-bottom: 8px;">Life Skills</h3>
+                        <p style="font-size: 14px; color: #7F8C8D; line-height: 1.4;">Problem solving, kindness & growing up</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div style="text-align: center; padding: 60px 20px;">
-            <div style="font-size: 80px; margin-bottom: 20px;">🧙‍♂️</div>
-            <h2 style="font-family: var(--primary-font); font-size: 36px; color: var(--mentor-purple); margin-bottom: 20px;">
-                Your AI Teacher is Ready!
-            </h2>
-            <p style="font-size: 20px; color: #555; max-width: 600px; margin: 0 auto 30px; line-height: 1.6;">
-                Click the purple button in the bottom-right corner to start chatting with your personal homeschool teacher. Ask anything, learn any subject, and get instant help!
-            </p>
-            <button class="start-learning-btn" onclick="toggleMentor()" style="font-size: 20px; padding: 18px 45px;">
-                Open AI Teacher 💬
-            </button>
+        <!-- Parent Dashboard View -->
+        <div id="parentView" class="hidden">
+            <div class="dashboard" style="background: white; border-radius: 30px; padding: 40px; box-shadow: 0 10px 40px var(--shadow);">
+                <h2 class="section-title" style="font-family: var(--primary-font); font-size: 36px; color: var(--ocean-blue); margin-bottom: 30px; text-align: center;">📊 Learning Progress Dashboard</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                    <div style="background: linear-gradient(135deg, #E74C3C, #C0392B); padding: 25px; border-radius: 20px; color: white;">
+                        <h3 style="font-family: var(--primary-font); font-size: 20px; margin-bottom: 15px;">🔢 Mathematics</h3>
+                        <div style="background: rgba(255,255,255,0.3); height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0;">
+                            <div style="background: white; height: 100%; width: 75%; border-radius: 5px;"></div>
+                        </div>
+                        <p>75% Complete • Level 3 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: Addition & Subtraction (1-20)</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #3498DB, #2980B9); padding: 25px; border-radius: 20px; color: white;">
+                        <h3 style="font-family: var(--primary-font); font-size: 20px; margin-bottom: 15px;">📖 English & Literacy</h3>
+                        <div style="background: rgba(255,255,255,0.3); height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0;">
+                            <div style="background: white; height: 100%; width: 68%; border-radius: 5px;"></div>
+                        </div>
+                        <p>68% Complete • Level 2 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: CVC Words & Simple Sentences</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #27AE60, #229954); padding: 25px; border-radius: 20px; color: white;">
+                        <h3 style="font-family: var(--primary-font); font-size: 20px; margin-bottom: 15px;">🌿 Nature Studies</h3>
+                        <div style="background: rgba(255,255,255,0.3); height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0;">
+                            <div style="background: white; height: 100%; width: 82%; border-radius: 5px;"></div>
+                        </div>
+                        <p>82% Complete • Level 4 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: Animal Habitats & Adaptation</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #9B59B6, #8E44AD); padding: 25px; border-radius: 20px; color: white;">
+                        <h3 style="font-family: var(--primary-font); font-size: 20px; margin-bottom: 15px;">🔬 Science</h3>
+                        <div style="background: rgba(255,255,255,0.3); height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0;">
+                            <div style="background: white; height: 100%; width: 60%; border-radius: 5px;"></div>
+                        </div>
+                        <p>60% Complete • Level 2 of 5</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Current: Life Cycles & Living Things</p>
+                    </div>
+                </div>
+
+                <h3 style="font-family: var(--primary-font); font-size: 28px; margin: 40px 0 20px;">🎯 Current Milestones (Ages 4-7)</h3>
+                
+                <div style="margin-top: 30px;">
+                    <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--grass-green); opacity: 0.7;">
+                        <h4 style="font-family: var(--primary-font); color: #2C3E50; margin-bottom: 8px;">✅ Number Recognition (1-20)</h4>
+                        <p>Completed: Recognizes and can write numbers 1-20 independently</p>
+                        <small>Achieved on: May 10, 2026</small>
+                    </div>
+
+                    <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--grass-green);">
+                        <h4 style="font-family: var(--primary-font); color: #2C3E50; margin-bottom: 8px;">🎯 Basic Addition (In Progress)</h4>
+                        <p>Working on: Adding numbers up to 10 using objects and visual aids</p>
+                        <small>Target: June 2026 • 70% complete</small>
+                    </div>
+
+                    <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--grass-green);">
+                        <h4 style="font-family: var(--primary-font); color: #2C3E50; margin-bottom: 8px;">📚 Reading CVC Words</h4>
+                        <p>Next up: Blending consonant-vowel-consonant words (cat, dog, sun)</p>
+                        <small>Target: June 2026</small>
+                    </div>
+
+                    <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--grass-green);">
+                        <h4 style="font-family: var(--primary-font); color: #2C3E50; margin-bottom: 8px;">🌍 World Geography Basics</h4>
+                        <p>Next up: Identifying continents and major oceans</p>
+                        <small>Target: July 2026</small>
+                    </div>
+                </div>
+
+                <h3 style="font-family: var(--primary-font); font-size: 28px; margin: 40px 0 20px;">📅 Recent Activities</h3>
+
+                <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer;">
+                    <h4 style="font-family: var(--primary-font); color: var(--ocean-blue); margin-bottom: 10px;">🏜️ Desert Ecosystem Exploration</h4>
+                    <p>Learned about 8 desert animals, their adaptations, and survival strategies</p>
+                    <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 8px; background: #FCF3CF; color: #D68910;">Age 5-6</span>
+                    <small style="display: block; margin-top: 10px; color: #7F8C8D;">Completed: May 18, 2026 • Duration: 25 minutes</small>
+                </div>
+
+                <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer;">
+                    <h4 style="font-family: var(--primary-font); color: var(--ocean-blue); margin-bottom: 10px;">🔢 Counting & Pattern Recognition</h4>
+                    <p>Practiced skip counting by 2s and 5s, identified number patterns</p>
+                    <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 8px; background: #D5F4E6; color: #27AE60;">Age 4-5</span>
+                    <small style="display: block; margin-top: 10px; color: #7F8C8D;">Completed: May 17, 2026 • Duration: 15 minutes</small>
+                </div>
+
+                <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer;">
+                    <h4 style="font-family: var(--primary-font); color: var(--ocean-blue); margin-bottom: 10px;">🌿 Plant Life Cycles</h4>
+                    <p>Observed seed germination, plant growth stages from seed to flower</p>
+                    <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 8px; background: #FCF3CF; color: #D68910;">Age 6-7</span>
+                    <small style="display: block; margin-top: 10px; color: #7F8C8D;">Completed: May 16, 2026 • Duration: 30 minutes</small>
+                </div>
+
+                <h3 style="font-family: var(--primary-font); font-size: 28px; margin: 40px 0 20px;">💡 Recommended Next Steps</h3>
+
+                <div style="background: linear-gradient(135deg, #FEF9E7, #FCF3CF); padding: 20px; border-radius: 15px; border-left: 5px solid var(--sun-yellow); margin-top: 15px;">
+                    <h4 style="font-family: var(--primary-font); color: #D68910; margin-bottom: 10px;">Suggested Focus Areas:</h4>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Mathematics:</strong> Continue with addition practice using number lines and counters</li>
+                        <li><strong>Reading:</strong> Introduce simple sight words (the, and, is, to) alongside phonics</li>
+                        <li><strong>Science:</strong> Explore water cycle with hands-on evaporation experiments</li>
+                        <li><strong>Social-Emotional:</strong> Practice sharing and turn-taking through cooperative games</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: #EBF5FB; border-radius: 15px;">
+                    <h4 style="font-family: var(--primary-font); color: var(--ocean-blue); margin-bottom: 10px;">📈 Learning Insights</h4>
+                    <p><strong>Strengths:</strong> Excellent visual learner, strong interest in nature and animals, good attention span for hands-on activities</p>
+                    <p style="margin-top: 10px;"><strong>Growth Areas:</strong> Building confidence with early writing, practicing patience with multi-step problems</p>
+                    <p style="margin-top: 10px;"><strong>Engagement:</strong> Most active during morning sessions (9-11am), prefers interactive games over passive videos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biome Modal -->
+        <div id="biomeModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
+            <div class="modal-content" style="position: relative; background: white; max-width: 900px; margin: 50px auto; border-radius: 30px; padding: 40px; max-height: 85vh; overflow-y: auto;">
+                <button class="close-modal" onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; font-size: 36px; cursor: pointer; color: #7F8C8D; background: none; border: none; width: 40px; height: 40px;">&times;</button>
+                <div id="biomeContent"></div>
+            </div>
+        </div>
+
+        <!-- Subject Modal -->
+        <div id="subjectModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
+            <div class="modal-content" style="position: relative; background: white; max-width: 900px; margin: 50px auto; border-radius: 30px; padding: 40px; max-height: 85vh; overflow-y: auto;">
+                <button class="close-modal" onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; font-size: 36px; cursor: pointer; color: #7F8C8D; background: none; border: none; width: 40px; height: 40px;">&times;</button>
+                <div id="subjectContent"></div>
+            </div>
         </div>
     </div>
 
@@ -965,7 +1188,31 @@ Keep responses concise (2-4 sentences usually), engaging, and at a 4-7 year old 
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
 
-        // Save conversation to localStorage
+        // Modal and content functions
+        function openBiome(biomeKey) {
+            alert(`Opening ${biomeKey} biome! Full content coming in next update. For now, ask the AI Teacher about this biome! 🧙‍♂️`);
+            toggleMentor();
+            document.getElementById('mentorInput').value = `Tell me about the ${biomeKey}`;
+        }
+
+        function openSubject(subjectKey) {
+            alert(`Opening ${subjectKey} subject! Full content coming in next update. For now, ask the AI Teacher about this topic! 🧙‍♂️`);
+            toggleMentor();
+            document.getElementById('mentorInput').value = `Teach me about ${subjectKey}`;
+        }
+
+        function closeModal() {
+            document.getElementById('biomeModal').style.display = 'none';
+            document.getElementById('subjectModal').style.display = 'none';
+        }
+
+        // Add hidden class style
+        const style = document.createElement('style');
+        style.textContent = '.hidden { display: none !important; }';
+        document.head.appendChild(style);
+
+        // View switching
+        function showChildView() {
         function saveConversation() {
             localStorage.setItem('fehu_conversation', JSON.stringify({
                 history: conversationHistory,
@@ -997,6 +1244,20 @@ Keep responses concise (2-4 sentences usually), engaging, and at a 4-7 year old 
                 document.getElementById('mentorIntro').classList.add('hidden');
             }
         });
+
+        // View switching
+        function showChildView() {
+            document.getElementById('childView').classList.remove('hidden');
+            document.getElementById('parentView').classList.add('hidden');
+        }
+
+        function showParentView() {
+            document.getElementById('childView').classList.add('hidden');
+            document.getElementById('parentView').classList.remove('hidden');
+        }
+
+        // Initialize with child view
+        showChildView();
 
         // Save before leaving
         window.addEventListener('beforeunload', saveConversation);
